@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SISTEMA DE VALIDACIÓN DE MATERIAS PRIMAS</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h1>SISTEMA DE VALIDACIÓN DE MATERIAS PRIMAS</h1>
+        <p style="color: #64748b; margin: 0; font-size: 0.9rem;">Verificación Cruzada</p>
+    </header>
+
+    <div class="card">
+        <div class="card-header">1. Identificación</div>
+        
+        <div class="input-group">
+            <label for="inputSupervisor">Validador</label>
+            <select id="inputSupervisor" onchange="verificarOtro(this)">
+                <option value="">Cargando...</option>
+            </select>
+            <input type="text" id="inputOtroValidador" placeholder="Ingrese nombre del validador" style="display:none; margin-top:5px;">
+        </div>
+
+        <div class="input-group">
+            <label for="selectTurno">Turno</label>
+            <select id="selectTurno">
+                <option value="MAÑANA">MAÑANA</option>
+                <option value="TARDE">TARDE</option>
+                <option value="NOCHE">NOCHE</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">2. Material Físico (Bobinas)</div>
+        
+        <div class="input-group">
+            <label>Cantidad de Bobinas a Utilizar</label>
+            <input type="number" id="cantBobinas" value="1" min="1" onchange="actualizarInterfazBobinas()">
+        </div>
+
+        <div id="contenedorBobinas">
+            <div class="bobina-row" style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                <p><b>Bobina 1</b></p>
+                <button class="btn-scan" onclick="startScan('fisico', 1)">📷 Escanear QR</button>
+                <input type="number" id="metros-1" placeholder="Metros totales" style="margin-top:5px">
+                
+                <input type="hidden" id="valFisico-1">
+                <input type="hidden" id="loteFisico-1">
+                <input type="hidden" id="provFisico-1">
+                
+                <div class="badge" id="statusFisico-1">Pendiente</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">3. N° Orden de Producción (OP)</div>
+        
+        <div class="input-group">
+            <label>N° OP</label>
+            <input type="number" id="inputOP" placeholder="Ej: 105430" oninput="sincronizarOP(this.value)">
+        </div>
+
+        <div class="input-group">
+            <label>Escanear OP Fisica</label>
+            <button class="btn-scan btn-purple" onclick="startScan('op')">📄 Escanear QR OP</button>
+            <input type="hidden" id="valMaterialOP">
+            <div class="badge" id="statusOP" style="margin-top:5px">Pendiente</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">4. Confirmación</div>
+        <div class="input-group">
+            <label>OP a Validar</label>
+            <input type="text" id="inputOP_Confirm" disabled style="background: #f1f5f9;">
+        </div>
+        <button class="btn-submit" onclick="validarYEnviar()">✅ VALIDAR</button>
+    </div>
+</div>
+
+<div id="reader-container" class="hidden">
+    <div class="reader-box">
+        <h3 style="text-align:center; margin-top:0;">Escaneando...</h3>
+        <div id="reader" style="width:100%"></div>
+        <button class="btn-close" onclick="stopScan()">Cancelar</button>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
